@@ -22,13 +22,6 @@ module CoingeckoApi
             )
         end
 
-        def get_indexes
-            request(
-                http_method: :get,
-                endpoint: "indexes",
-            )
-        end
-
         def search_trending
             request(
                 http_method: :get,
