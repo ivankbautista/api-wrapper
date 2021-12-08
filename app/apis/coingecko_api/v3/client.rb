@@ -7,18 +7,18 @@ module CoingeckoApi
             
         BASE_URL = 'https://api.coingecko.com/api/v3/'.freeze
 
-        #?per_page=5 - 5 results per page
+        #?per_page=10 - 10 results per page
         def get_exchanges
             request(
                 http_method: :get,
-                endpoint: "exchanges?per_page=5",
+                endpoint: "exchanges?per_page=10",
             )
         end
 
-        def get_financeplatforms
+        def get_globaldata
             request(
                 http_method: :get,
-                endpoint: "finance_platforms",
+                endpoint: "global",
             )
         end
 
