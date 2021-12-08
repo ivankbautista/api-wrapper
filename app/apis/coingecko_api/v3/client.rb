@@ -1,4 +1,4 @@
-module CoingeckoAPI
+module CoingeckoApi
     # CoinGecko API Docs: https://www.coingecko.com/en/api/documentation
     module V3
         class Client
@@ -7,24 +7,25 @@ module CoingeckoAPI
             
         BASE_URL = 'https://api.coingecko.com/api/v3/'.freeze
 
+        #?per_page=5 - 5 results per page
         def get_exchanges
             request(
                 http_method: :get,
-                endpoint: "exchanges",
+                endpoint: "exchanges?per_page=5",
             )
         end
 
-        def get_platforms
+        def get_financeplatforms
             request(
                 http_method: :get,
-                endpoint: "finance_platforms?per_page=5"
+                endpoint: "finance_platforms",
             )
         end
 
         def get_indexes
             request(
                 http_method: :get,
-                endpoint: "indexes?per_page=5"
+                endpoint: "indexes",
             )
         end
 
@@ -35,7 +36,7 @@ module CoingeckoAPI
             )
         end
 
-        def btc_holdings
+        def company_btcholdings
             request(
                 http_method: :get,
                 endpoint: "companies/public_treasury/bitcoin"
@@ -45,7 +46,7 @@ module CoingeckoAPI
         private
         def request(http_method:, endpoint:, params: {})
             @response = connection.public_send(http_method, endpoint, params)
-            JSON.parse(@response.body)
+            return JSON.parse(@response.body) if @response.status == HTTP_OK_CODE
         end
 
         def connection
@@ -53,4 +54,18 @@ module CoingeckoAPI
                 url: BASE_URL,
             )
         end
+
+        def error_class
+            case @response.status
+            when HTTP_NOT_FOUND_CODE
+                NotFoundError
+            when HTTP_UNAUTHORIZED_CODE
+                UnauthorizedError
+            else
+                ApiError
+            end
+        end
     end
+end
+end
+        
